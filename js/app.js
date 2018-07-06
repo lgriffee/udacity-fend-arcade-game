@@ -46,10 +46,12 @@ var Player = function(x, y) {
 
 // Update the player's position
 Player.prototype.update = function() {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    const WATER_Y_BOUND = -41;
     //TODO: Handle collision with Enemies
+    //TODO: reset player if they reach the water
+    if (this.y <= WATER_Y_BOUND){
+      this.reset();
+    }
 };
 
 // Draw the player on the screen
@@ -73,6 +75,7 @@ Player.prototype.handleInput = function(key) {
     case 'up':
       if ((this.y - ROW_FACTOR) > UP_BOUND){
         this.y -= ROW_FACTOR;
+        console.log(this.y);
         //TODO: determine if player reaches water
       }
       break;
@@ -91,7 +94,8 @@ Player.prototype.handleInput = function(key) {
 
 // Reset the player
 Player.prototype.reset = function() {
-    //TODO: reset player if they reach the water
+    this.x = 2 * COL_FACTOR;
+    this.y = 4.5 * ROW_FACTOR;
 };
 
 
@@ -106,7 +110,7 @@ const COL_FACTOR = 101;
 // var e1 = new Enemy(0 * COL_FACTOR, 0 * ROW_FACTOR, 0);
 var e1 = new Enemy(-50, -50, getRandomArbitrary(100, 500));
 var allEnemies = [e1];
-var player = new Player(2 * COL_FACTOR, 4.5 * ROW_FACTOR, 0);
+var player = new Player(2 * COL_FACTOR, 4.5 * ROW_FACTOR);
 
 
 /*
