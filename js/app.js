@@ -1,5 +1,28 @@
 /*
 *
+* GLOBAL VARIABLES
+*
+*/
+
+const ROW_FACTOR = 83;
+const COL_FACTOR = 101;
+
+const UP_BOUND = -20.75;
+const DOWN_BOUND = 456;
+const LEFT_BOUND = 0;
+const RIGHT_BOUND = 404;
+
+const ENEMY_START_LOC = -101;
+const ENEMY_END_LOC = 505;
+
+const PLAYER_START_X = 2;
+const PLAYER_START_Y = 4.75;
+
+const RAND_SPEED_LOW = 100;
+const RAND_SPEED_HIGH = 500;
+
+/*
+*
 * ENEMY CLASS
 *
 */
@@ -7,20 +30,26 @@
 // Enemies our player must avoid
 var Enemy = function(x, y, speed) {
     this.sprite = 'images/enemy-bug.png';
+    this.spriteWidth = 96;
+    this.spriteHeight = 65;
     this.x = x;
     this.y = y;
     this.speed = speed;
 };
 
 // Update the enemy's position
-// Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+    //move the Enemy at constant speed across all browsers
     this.x += this.speed * dt;
-    //TODO: Update enemy location
-    //TODO: Handle collision with the Player
+
+    if (this.x > ENEMY_END_LOC){
+      this.x = ENEMY_START_LOC;
+      this.speed = getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH);
+    }
 };
 
-//From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+// Random number generator (between two numbers) function from:
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }
@@ -40,17 +69,20 @@ Enemy.prototype.render = function() {
 // The player the user controls
 var Player = function(x, y) {
     this.sprite = 'images/char-boy.png';
+    this.spriteWidth = 66;
+    this.spriteHeight = 75;
     this.x = x;
     this.y = y;
 };
 
 // Update the player's position
 Player.prototype.update = function() {
-    const WATER_Y_BOUND = -41;
-    //TODO: Handle collision with Enemies
-    //TODO: reset player if they reach the water
-    if (this.y <= WATER_Y_BOUND){
-      this.reset();
+    // Reset player if they reach the water
+    if (this.y <= UP_BOUND){
+      const that = this;
+      setTimeout(function () {
+        that.reset();
+      }, 200);
     }
 };
 
@@ -61,11 +93,6 @@ Player.prototype.render = function() {
 
 // Handle keyboard input for the player
 Player.prototype.handleInput = function(key) {
-    const UP_BOUND = -42;
-    const DOWN_BOUND = 456;
-    const LEFT_BOUND = 0;
-    const RIGHT_BOUND = 404;
-
     switch(key) {
     case 'left':
       if ((this.x - COL_FACTOR) >= LEFT_BOUND){
@@ -73,10 +100,8 @@ Player.prototype.handleInput = function(key) {
       }
       break;
     case 'up':
-      if ((this.y - ROW_FACTOR) > UP_BOUND){
+      if ((this.y - ROW_FACTOR) >= UP_BOUND){
         this.y -= ROW_FACTOR;
-        console.log(this.y);
-        //TODO: determine if player reaches water
       }
       break;
     case 'right':
@@ -94,8 +119,8 @@ Player.prototype.handleInput = function(key) {
 
 // Reset the player
 Player.prototype.reset = function() {
-    this.x = 2 * COL_FACTOR;
-    this.y = 4.5 * ROW_FACTOR;
+    this.x = PLAYER_START_X * COL_FACTOR;
+    this.y = PLAYER_START_Y * ROW_FACTOR;
 };
 
 
@@ -104,13 +129,12 @@ Player.prototype.reset = function() {
 * GAMEPLAY
 *
 */
-const ROW_FACTOR = 83;
-const COL_FACTOR = 101;
 
-// var e1 = new Enemy(0 * COL_FACTOR, 0 * ROW_FACTOR, 0);
-var e1 = new Enemy(-50, -50, getRandomArbitrary(100, 500));
-var allEnemies = [e1];
-var player = new Player(2 * COL_FACTOR, 4.5 * ROW_FACTOR);
+const  allEnemies = [new Enemy(ENEMY_START_LOC, 61, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
+                     new Enemy(ENEMY_START_LOC, 144, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
+                     new Enemy(ENEMY_START_LOC, 227, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH))];
+
+const player = new Player(PLAYER_START_X * COL_FACTOR, PLAYER_START_Y * ROW_FACTOR);
 
 
 /*
