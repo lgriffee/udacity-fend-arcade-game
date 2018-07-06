@@ -15,12 +15,15 @@ var Enemy = function(x, y, speed) {
 // Update the enemy's position
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    this.x += this.speed * dt;
     //TODO: Update enemy location
     //TODO: Handle collision with the Player
 };
+
+//From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
 
 // Draw the enemy on the screen
 Enemy.prototype.render = function() {
@@ -101,7 +104,7 @@ const ROW_FACTOR = 83;
 const COL_FACTOR = 101;
 
 // var e1 = new Enemy(0 * COL_FACTOR, 0 * ROW_FACTOR, 0);
-var e1 = new Enemy(-50, -50, 0);
+var e1 = new Enemy(-50, -50, getRandomArbitrary(100, 500));
 var allEnemies = [e1];
 var player = new Player(2 * COL_FACTOR, 4.5 * ROW_FACTOR, 0);
 
