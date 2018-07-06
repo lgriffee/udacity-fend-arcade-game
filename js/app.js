@@ -42,11 +42,10 @@ var Player = function(x, y) {
 };
 
 // Update the player's position
-Player.prototype.update = function(dt) {
+Player.prototype.update = function() {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    //TODO: Update player location
     //TODO: Handle collision with Enemies
 };
 
@@ -57,9 +56,34 @@ Player.prototype.render = function() {
 
 // Handle keyboard input for the player
 Player.prototype.handleInput = function(key) {
-    //TODO: handle key input
-    //TODO: prevent player from moving off screen
-    //TODO: determine if player reaches water
+    const UP_BOUND = -42;
+    const DOWN_BOUND = 456;
+    const LEFT_BOUND = 0;
+    const RIGHT_BOUND = 404;
+
+    switch(key) {
+    case 'left':
+      if ((this.x - COL_FACTOR) >= LEFT_BOUND){
+        this.x -= COL_FACTOR;
+      }
+      break;
+    case 'up':
+      if ((this.y - ROW_FACTOR) > UP_BOUND){
+        this.y -= ROW_FACTOR;
+        //TODO: determine if player reaches water
+      }
+      break;
+    case 'right':
+      if ((this.x + COL_FACTOR) <= RIGHT_BOUND){
+        this.x += COL_FACTOR;
+      }
+      break;
+    case 'down':
+      if ((this.y + ROW_FACTOR) < DOWN_BOUND){
+        this.y += ROW_FACTOR;
+      }
+      break;
+    }
 };
 
 // Reset the player
@@ -73,10 +97,13 @@ Player.prototype.reset = function() {
 * GAMEPLAY
 *
 */
+const ROW_FACTOR = 83;
+const COL_FACTOR = 101;
 
-var e1 = new Enemy(0, 0, 0);
+// var e1 = new Enemy(0 * COL_FACTOR, 0 * ROW_FACTOR, 0);
+var e1 = new Enemy(-50, -50, 0);
 var allEnemies = [e1];
-var player = new Player(0, 0, 0);
+var player = new Player(2 * COL_FACTOR, 4.5 * ROW_FACTOR, 0);
 
 
 /*
@@ -92,6 +119,8 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
+
+    e.preventDefault();
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
