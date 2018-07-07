@@ -27,7 +27,7 @@ const RAND_SPEED_HIGH = 500;
 *
 */
 
-// Enemies our player must avoid 
+// Enemies our player must avoid
 var Enemy = function(x, y, speed) {
     this.sprite = 'images/enemy-bug.png';
     this.spriteWidth = 96;
@@ -42,10 +42,16 @@ Enemy.prototype.update = function(dt) {
     //move the Enemy at constant speed across all browsers
     this.x += this.speed * dt;
 
+    //loop enemies across the screen
     if (this.x > ENEMY_END_LOC){
-      this.x = ENEMY_START_LOC;
-      this.speed = getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH);
+      this.reset();
     }
+};
+
+// Reset the player
+Enemy.prototype.reset = function() {
+  this.x = ENEMY_START_LOC;
+  this.speed = getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH);
 };
 
 // Random number generator (between two numbers) function from:
@@ -135,6 +141,10 @@ const  allEnemies = [new Enemy(ENEMY_START_LOC, 61, getRandomArbitrary(RAND_SPEE
                      new Enemy(ENEMY_START_LOC, 227, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH))];
 
 const player = new Player(PLAYER_START_X * COL_FACTOR, PLAYER_START_Y * ROW_FACTOR);
+
+// Draw avatar button on scoreboard
+const avatar = document.querySelector('.avatar');
+avatar.src = player.sprite;
 
 
 /*
