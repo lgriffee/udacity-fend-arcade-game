@@ -27,7 +27,7 @@ const RAND_SPEED_HIGH = 500;
 *
 */
 
-// Enemies our player must avoid
+// Enemies our player must avoid 
 var Enemy = function(x, y, speed) {
     this.sprite = 'images/enemy-bug.png';
     this.spriteWidth = 96;
