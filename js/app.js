@@ -22,6 +22,12 @@ const RAND_SPEED_LOW = 100;
 const RAND_SPEED_HIGH = 500;
 
 const winModal = document.querySelector('.win-modal');
+const gameOverModal = document.querySelector('.game-over-modal');
+
+let  allEnemies = [];
+let player;
+
+let score = 0;
 
 /*
 *
@@ -160,26 +166,53 @@ Player.prototype.reset = function() {
 
 /*
 *
-* CREATE PLAYERS
+* GAMEPLAY
 *
 */
 
-const  allEnemies = [new Enemy(ENEMY_START_LOC, 61, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
-                     new Enemy(ENEMY_START_LOC, 144, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
-                     new Enemy(ENEMY_START_LOC, 227, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH))];
-
-const player = new Player(PLAYER_START_X * COL_FACTOR, PLAYER_START_Y * ROW_FACTOR);
-
-// Draw avatar button on scoreboard
-const avatar = document.querySelector('.avatar');
-avatar.src = player.sprite;
+newGame();
 
 
 /*
 *
-* Heart
+* FUNCTIONS
 *
 */
+
+/* ------------------------ Gameplay ------------------------*/
+
+// Reset game
+function newGame(){
+  allEnemies = [new Enemy(ENEMY_START_LOC, 61, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
+                       new Enemy(ENEMY_START_LOC, 144, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
+                       new Enemy(ENEMY_START_LOC, 227, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH))];
+
+  player = new Player(PLAYER_START_X * COL_FACTOR, PLAYER_START_Y * ROW_FACTOR);
+
+  // Draw avatar button on scoreboard
+  const avatar = document.querySelector('.avatar');
+  avatar.src = player.sprite;
+
+  score = 0;
+
+  gameOverModal.style.display = 'none';
+}
+
+function showGameOverModal(){
+  getResultScore();
+  gameOverModal.style.display = 'block';
+}
+
+
+// Get the total time it took the user to play the game
+function getResultScore(){
+  let score = document.querySelector('.score');
+  let scoreResult = document.querySelector('.score-result');
+  scoreResult.textContent = score.textContent;
+}
+
+
+/* ------------------------ Score Pannel ------------------------*/
 
 function removeHeart(){
   const heart = document.querySelector('.fa-heart');
@@ -204,27 +237,6 @@ function addHeart(){
 
 /*
 *
-* GAMEOVER
-*
-*/
-
-function showGameOverModal(){
-  const gameOverModal = document.querySelector('.game-over-modal');
-  getScore();
-  gameOverModal.style.display = 'block';
-}
-
-
-// Get the total time it took the user to play the game
-function getScore(){
-  let score = document.querySelector('.score');
-  let scoreResult = document.querySelector('.score-result');
-  scoreResult.textContent = score.textContent;
-}
-
-
-/*
-*
 * EVENT LISTENERS
 *
 */
@@ -244,10 +256,12 @@ document.addEventListener('keyup', function(e) {
 
 let restartButton = document.querySelector('.restart-icon');
 restartButton.addEventListener('click', function() {
-    //TODO: Reset Game
+    resetHearts();
+    newGame();
 });
 
 let newGameButton = document.querySelector('.new-game-button');
 newGameButton.addEventListener('click', function() {
-    //TODO: Reset Game
+    resetHearts();
+    newGame();
 });
