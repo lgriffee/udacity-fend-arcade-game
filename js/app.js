@@ -130,7 +130,7 @@ Player.prototype.handleInput = function(key) {
 // Decrease lives and reset player when they die
 Player.prototype.die = function() {
     this.lives--;
-    // removeHeart();
+    removeHeart();
     this.reset();
     if (this.lives == 0){
       showGameOverModal();
@@ -181,25 +181,25 @@ avatar.src = player.sprite;
 *
 */
 
-// function removeHeart(){
-//   const heart = document.querySelector('.fa-heart');
-//   heart.classList.remove('fa-heart');
-//   heart.classList.add('fa-heart-o');
-// }
-//
-// function resetHearts(){
-//   const maxHearts = 3;
-//   const heartsNeeded = (maxHearts - player.lives);
-//   for (let i = 0; i < heartsNeeded; i++){
-//     addHeart();
-//   }
-// }
-//
-// function addHeart(){
-//   const heart = document.querySelector('.fa-heart-o');
-//   heart.classList.remove('fa-heart-o');
-//   heart.classList.add('fa-heart');
-// }
+function removeHeart(){
+  const heart = document.querySelector('.fa-heart');
+  heart.classList.remove('fa-heart');
+  heart.classList.add('fa-heart-o');
+}
+
+function resetHearts(){
+  const maxHearts = 3;
+  const heartsNeeded = (maxHearts - player.lives);
+  for (let i = 0; i < heartsNeeded; i++){
+    addHeart();
+  }
+}
+
+function addHeart(){
+  const heart = document.querySelector('.fa-heart-o');
+  heart.classList.remove('fa-heart-o');
+  heart.classList.add('fa-heart');
+}
 
 
 /*
