@@ -79,6 +79,8 @@ var Player = function(x, y) {
     this.spriteHeight = 75;
     this.x = x;
     this.y = y;
+    this.key = false;
+    this.lives = 3;
 };
 
 // Update the player's position
@@ -123,6 +125,16 @@ Player.prototype.handleInput = function(key) {
     }
 };
 
+// Decrease lives and reset player when they die
+Player.prototype.die = function() {
+    this.lives--;
+    this.reset();
+    console.log(this.lives);
+    if (this.lives == 0){
+      showGameOverModal();
+    }
+};
+
 // Reset the player
 Player.prototype.reset = function() {
     this.x = PLAYER_START_X * COL_FACTOR;
@@ -132,7 +144,7 @@ Player.prototype.reset = function() {
 
 /*
 *
-* GAMEPLAY
+* CREATE PLAYERS
 *
 */
 
@@ -145,6 +157,26 @@ const player = new Player(PLAYER_START_X * COL_FACTOR, PLAYER_START_Y * ROW_FACT
 // Draw avatar button on scoreboard
 const avatar = document.querySelector('.avatar');
 avatar.src = player.sprite;
+
+
+/*
+*
+* GAMEOVER
+*
+*/
+
+function showGameOverModal(){
+  const gameOverModal = document.querySelector('.game-over-modal');
+  getScore();
+  gameOverModal.style.display = 'block';
+}
+
+// Get the total time it took the user to play the game
+function getScore(){
+  let score = document.querySelector('.score');
+  let scoreResult = document.querySelector('.score-result');
+  scoreResult.textContent = score.textContent;
+}
 
 
 /*
@@ -164,4 +196,14 @@ document.addEventListener('keyup', function(e) {
     e.preventDefault();
 
     player.handleInput(allowedKeys[e.keyCode]);
+});
+
+let restartButton = document.querySelector('.restart-icon');
+restartButton.addEventListener('click', function() {
+    //TODO: Reset Game
+});
+
+let newGameButton = document.querySelector('.new-game-button');
+newGameButton.addEventListener('click', function() {
+    //TODO: Reset Game
 });

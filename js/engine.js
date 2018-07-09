@@ -106,9 +106,7 @@ var Engine = (function(global) {
             (player.x + 17.5) + player.spriteWidth > (enemy.x + 2.5) &&
             (player.y + 64.5)  < (enemy.y + 78) + enemy.spriteHeight &&
             player.spriteHeight + (player.y + 64.5) > (enemy.y + 78)) {
-              setTimeout(function () {
-                player.reset();
-              }, 200);
+              player.die();
         }
       });
     }
@@ -178,7 +176,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        console.log("reset");
     }
 
     /* Go ahead and load all of the images we know we're going to need to
