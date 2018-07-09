@@ -21,6 +21,8 @@ const PLAYER_START_Y = 4.75;
 const RAND_SPEED_LOW = 100;
 const RAND_SPEED_HIGH = 500;
 
+const winModal = document.querySelector('.win-modal');
+
 /*
 *
 * ENEMY CLASS
@@ -89,7 +91,7 @@ Player.prototype.update = function() {
     if (this.y <= UP_BOUND){
       const that = this;
       setTimeout(function () {
-        that.reset();
+        that.win();
       }, 200);
     }
 };
@@ -128,11 +130,25 @@ Player.prototype.handleInput = function(key) {
 // Decrease lives and reset player when they die
 Player.prototype.die = function() {
     this.lives--;
+    // removeHeart();
     this.reset();
-    console.log(this.lives);
     if (this.lives == 0){
       showGameOverModal();
     }
+};
+
+// Incread score and reset player when they reach the exit
+Player.prototype.win = function() {
+  winModal.style.display = 'block';
+
+  const that = this;
+  setTimeout(function () {
+    that.reset();
+  }, 1800);
+
+  setTimeout(function () {
+    winModal.style.display = 'none';
+  }, 2000);
 };
 
 // Reset the player
@@ -161,6 +177,33 @@ avatar.src = player.sprite;
 
 /*
 *
+* Heart
+*
+*/
+
+// function removeHeart(){
+//   const heart = document.querySelector('.fa-heart');
+//   heart.classList.remove('fa-heart');
+//   heart.classList.add('fa-heart-o');
+// }
+//
+// function resetHearts(){
+//   const maxHearts = 3;
+//   const heartsNeeded = (maxHearts - player.lives);
+//   for (let i = 0; i < heartsNeeded; i++){
+//     addHeart();
+//   }
+// }
+//
+// function addHeart(){
+//   const heart = document.querySelector('.fa-heart-o');
+//   heart.classList.remove('fa-heart-o');
+//   heart.classList.add('fa-heart');
+// }
+
+
+/*
+*
 * GAMEOVER
 *
 */
@@ -170,6 +213,7 @@ function showGameOverModal(){
   getScore();
   gameOverModal.style.display = 'block';
 }
+
 
 // Get the total time it took the user to play the game
 function getScore(){

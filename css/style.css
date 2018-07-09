@@ -169,20 +169,61 @@ h3 {
   top: -50px;
 }
 
-
 /*
 * WIN MODAL
 */
 
-.game-over-modal {
-  /* display: none; */
+.win-modal {
+  display: none;
   position: fixed;
   z-index: 1;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+}
+
+.win-modal-content {
+  margin: 40px auto;
+  padding: 40px;
+  width: 260px;
+  background-color: var(--modal-bkg);
+  border-radius: 10px;
+  border: 5px solid var(--modal-border);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  text-align: center;
+}
+
+.win-modal-title {
+  margin: 0 0 15px 0;
+}
+
+.win-image-container{
+  width: 100%;
+}
+
+.win-image{
+  width: 180px;
+  margin: 0 auto;
+}
+
+
+
+/*
+* GAME OVER MODAL
+*/
+
+.game-over-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   background-color: var(--modal-overlay);
 }
 
@@ -197,7 +238,6 @@ h3 {
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
-  /* justify-content: space-around; */
   text-align: center;
 }
 
