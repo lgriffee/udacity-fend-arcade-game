@@ -12,6 +12,9 @@ const DOWN_BOUND = 456;
 const LEFT_BOUND = 0;
 const RIGHT_BOUND = 404;
 
+const WIN_PORTAL_X = 202;
+const WIN_PORTAL_Y = -20.75;
+
 const ENEMY_START_LOC = -101;
 const ENEMY_END_LOC = 505;
 
@@ -94,7 +97,7 @@ var Player = function(x, y) {
 // Update the player's position
 Player.prototype.update = function() {
     // Reset player if they reach the water
-    if (this.y <= UP_BOUND){
+    if (this.x == WIN_PORTAL_X && this.y == WIN_PORTAL_Y){
       const that = this;
       setTimeout(function () {
         that.win();
@@ -118,6 +121,8 @@ Player.prototype.handleInput = function(key) {
     case 'up':
       if ((this.y - ROW_FACTOR) >= UP_BOUND){
         this.y -= ROW_FACTOR;
+        // console.log(player.x);
+        // console.log(player.y);
       }
       break;
     case 'right':

@@ -117,6 +117,19 @@ var Engine = (function(global) {
      * they are flipbooks creating the illusion of animation but in reality
      * they are just drawing the entire screen over and over.
      */
+
+     const keyLocX = [0, 101, 202, 303, 404];
+     const keyLocY = [41.5, 124.5, 207.5];
+
+     let keyX = keyLocX[getRandomInt(0, 4)];
+     let keyY = keyLocY[getRandomInt(0, 2)];
+
+     //Returns a random integer between min (inclusive) and max (inclusive)
+     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+     function getRandomInt(min, max) {
+         return Math.floor(Math.random() * (max - min + 1)) + min;
+     }
+
     function render() {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
@@ -153,8 +166,14 @@ var Engine = (function(global) {
             }
         }
 
+        ctx.drawImage(Resources.get('images/selector.png'), 202, -41.5);
+
+
+        ctx.drawImage(Resources.get('images/key.png'), keyX, keyY);
+
         renderEntities();
     }
+
 
     /* This function is called by the render function and is called on each game
      * tick. Its purpose is to then call the render functions you have defined
@@ -187,7 +206,12 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/selector.png',
+        'images/key.png',
+        'images/gem-orange.png',
+        'images/gem-green.png',
+        'images/gem-blue.png',
     ]);
     Resources.onReady(init);
 
