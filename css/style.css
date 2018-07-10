@@ -86,7 +86,7 @@ h3 {
   width: 101px;
   margin: 0 15px 0 0;
   position: relative;
-  top: 50px; 
+  top: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -131,7 +131,7 @@ h3 {
   color: var(--key-none-color);
 }
 
-.key.found{
+.key-icon.found{
   color: var(--key-found-color);
 }
 

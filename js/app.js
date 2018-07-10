@@ -96,8 +96,8 @@ var Player = function(x, y) {
 
 // Update the player's position
 Player.prototype.update = function() {
-    // Reset player if they reach the water
-    if (this.x == WIN_PORTAL_X && this.y == WIN_PORTAL_Y){
+    // Show win modal if player reaches portal with key & reset player to start
+    if (this.x == WIN_PORTAL_X && this.y == WIN_PORTAL_Y && player.key == true){
       const that = this;
       setTimeout(function () {
         that.win();
@@ -121,8 +121,6 @@ Player.prototype.handleInput = function(key) {
     case 'up':
       if ((this.y - ROW_FACTOR) >= UP_BOUND){
         this.y -= ROW_FACTOR;
-        // console.log(player.x);
-        // console.log(player.y);
       }
       break;
     case 'right':
@@ -166,6 +164,12 @@ Player.prototype.win = function() {
 Player.prototype.reset = function() {
     this.x = PLAYER_START_X * COL_FACTOR;
     this.y = PLAYER_START_Y * ROW_FACTOR;
+
+    if (player.key == true){
+      const keyIcon = document.querySelector('.key-icon');
+      keyIcon.classList.remove('found');
+      player.key = false;
+    }
 };
 
 

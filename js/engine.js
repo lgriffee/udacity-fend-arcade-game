@@ -13,11 +13,18 @@
  * writing app.js a little simpler to work with.
  */
 
+
 var Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
      */
+     const keyLocX = [0, 101, 202, 303, 404];
+     const keyLocY = [41.5, 124.5, 207.5];
+
+     let keyX = keyLocX[getRandomInt(0, 4)];
+     let keyY = keyLocY[getRandomInt(0, 2)];
+
     var doc = global.document,
         win = global.window,
         canvas = doc.createElement('canvas'),
@@ -98,6 +105,7 @@ var Engine = (function(global) {
         player.update();
     }
 
+
     //Collision detection function modified from:
     //https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
     function checkCollisions() {
@@ -107,8 +115,28 @@ var Engine = (function(global) {
             (player.y + 64.5)  < (enemy.y + 78) + enemy.spriteHeight &&
             player.spriteHeight + (player.y + 64.5) > (enemy.y + 78)) {
               player.die();
+
+              if (player.lives == 0){
+                keyX = keyLocX[getRandomInt(0, 4)];
+                keyY = keyLocY[getRandomInt(0, 2)];
+              }
         }
       });
+
+      if ((player.x + 17.5) < (keyX + 2.5) + 43 &&
+          (player.x + 17.5) + player.spriteWidth > (keyX + 2.5) &&
+          (player.y + 64.5)  < (keyY + 78) + 85 &&
+          player.spriteHeight + (player.y + 64.5) > (keyY + 78)) {
+            player.key = true;
+            const keyIcon = document.querySelector('.key-icon');
+            keyIcon.classList.add('found');
+      }
+    }
+
+    //Returns a random integer between min (inclusive) and max (inclusive)
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     /* This function initially draws the "game level", it will then call
@@ -117,18 +145,6 @@ var Engine = (function(global) {
      * they are flipbooks creating the illusion of animation but in reality
      * they are just drawing the entire screen over and over.
      */
-
-     const keyLocX = [0, 101, 202, 303, 404];
-     const keyLocY = [41.5, 124.5, 207.5];
-
-     let keyX = keyLocX[getRandomInt(0, 4)];
-     let keyY = keyLocY[getRandomInt(0, 2)];
-
-     //Returns a random integer between min (inclusive) and max (inclusive)
-     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-     function getRandomInt(min, max) {
-         return Math.floor(Math.random() * (max - min + 1)) + min;
-     }
 
     function render() {
         /* This array holds the relative URL to the image used
@@ -168,8 +184,9 @@ var Engine = (function(global) {
 
         ctx.drawImage(Resources.get('images/selector.png'), 202, -41.5);
 
-
-        ctx.drawImage(Resources.get('images/key.png'), keyX, keyY);
+        if (player.key == false){
+          ctx.drawImage(Resources.get('images/key.png'), keyX, keyY);
+        }
 
         renderEntities();
     }
