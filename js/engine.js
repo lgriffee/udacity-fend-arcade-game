@@ -19,6 +19,9 @@ var Engine = (function(global) {
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
      */
+     const WIN_PORTAL_X = 202;
+     const WIN_PORTAL_Y = -20.75;
+
      const keyLocX = [0, 101, 202, 303, 404];
      const keyLocY = [41.5, 124.5, 207.5];
 
@@ -89,6 +92,7 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
+        checkForWin(); 
     }
 
     /* This is called by the update function and loops through all of the
@@ -117,8 +121,7 @@ var Engine = (function(global) {
               player.die();
 
               if (player.lives == 0){
-                keyX = keyLocX[getRandomInt(0, 4)];
-                keyY = keyLocY[getRandomInt(0, 2)];
+                changeKeyLoc();
               }
         }
       });
@@ -131,6 +134,20 @@ var Engine = (function(global) {
             const keyIcon = document.querySelector('.key-icon');
             keyIcon.classList.add('found');
       }
+    }
+
+    function checkForWin(){
+      if (player.x == WIN_PORTAL_X && player.y == WIN_PORTAL_Y && player.key == true){
+        setTimeout(function () {
+          player.win();
+        }, 200);
+        changeKeyLoc();
+      }
+    }
+
+    function changeKeyLoc() {
+      keyX = keyLocX[getRandomInt(0, 4)];
+      keyY = keyLocY[getRandomInt(0, 2)];
     }
 
     //Returns a random integer between min (inclusive) and max (inclusive)

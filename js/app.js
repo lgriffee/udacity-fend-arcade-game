@@ -12,9 +12,6 @@ const DOWN_BOUND = 456;
 const LEFT_BOUND = 0;
 const RIGHT_BOUND = 404;
 
-const WIN_PORTAL_X = 202;
-const WIN_PORTAL_Y = -20.75;
-
 const ENEMY_START_LOC = -101;
 const ENEMY_END_LOC = 505;
 
@@ -26,6 +23,7 @@ const RAND_SPEED_HIGH = 500;
 
 const winModal = document.querySelector('.win-modal');
 const gameOverModal = document.querySelector('.game-over-modal');
+const keyIcon = document.querySelector('.key-icon');
 
 let  allEnemies = [];
 let player;
@@ -96,13 +94,7 @@ var Player = function(x, y) {
 
 // Update the player's position
 Player.prototype.update = function() {
-    // Show win modal if player reaches portal with key & reset player to start
-    if (this.x == WIN_PORTAL_X && this.y == WIN_PORTAL_Y && player.key == true){
-      const that = this;
-      setTimeout(function () {
-        that.win();
-      }, 200);
-    }
+
 };
 
 // Draw the player on the screen
@@ -166,7 +158,6 @@ Player.prototype.reset = function() {
     this.y = PLAYER_START_Y * ROW_FACTOR;
 
     if (player.key == true){
-      const keyIcon = document.querySelector('.key-icon');
       keyIcon.classList.remove('found');
       player.key = false;
     }
@@ -178,6 +169,10 @@ Player.prototype.reset = function() {
 * GAMEPLAY
 *
 */
+allEnemies = [new Enemy(ENEMY_START_LOC, 61, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
+                     new Enemy(ENEMY_START_LOC, 144, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
+                     new Enemy(ENEMY_START_LOC, 227, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH))];
+player = new Player(PLAYER_START_X * COL_FACTOR, PLAYER_START_Y * ROW_FACTOR);
 
 newGame();
 
@@ -192,11 +187,9 @@ newGame();
 
 // Reset game
 function newGame(){
-  allEnemies = [new Enemy(ENEMY_START_LOC, 61, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
-                       new Enemy(ENEMY_START_LOC, 144, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
-                       new Enemy(ENEMY_START_LOC, 227, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH))];
+  allEnemies.forEach(function(enemy) {enemy.reset();});
 
-  player = new Player(PLAYER_START_X * COL_FACTOR, PLAYER_START_Y * ROW_FACTOR);
+  player.reset();
 
   // Draw avatar button on scoreboard
   const avatar = document.querySelector('.avatar');
@@ -225,8 +218,10 @@ function getResultScore(){
 
 function removeHeart(){
   const heart = document.querySelector('.fa-heart');
-  heart.classList.remove('fa-heart');
-  heart.classList.add('fa-heart-o');
+  if (heart != undefined){
+    heart.classList.remove('fa-heart');
+    heart.classList.add('fa-heart-o');
+  }
 }
 
 function resetHearts(){
