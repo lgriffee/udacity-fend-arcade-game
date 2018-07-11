@@ -1,15 +1,11 @@
 /* Engine.js
  * This file provides the game loop functionality (update entities and render),
  * draws the initial game board on the screen, and then calls the update and
- * render methods on your player and enemy objects (defined in your app.js).
+ * render methods on player and enemy objects (defined in app.js).
  */
 
 
 var Engine = (function(global) {
-    /* Predefine the variables we'll be using within this scope,
-     * create the canvas element, grab the 2D context for that canvas
-     * set the canvas elements height/width and add it to the DOM.
-     */
      const WIN_PORTAL_X = 202;
      const WIN_PORTAL_Y = -20.75;
 
@@ -18,21 +14,17 @@ var Engine = (function(global) {
 
      let gemOrangeX = itemLocX[getRandomInt(0, 4)];
      let gemOrangeY = itemLocY[getRandomInt(0, 2)];
-     let gemOrangeCount = 0;
-
      let gemGreenX = itemLocX[getRandomInt(0, 4)];
      let gemGreenY = itemLocY[getRandomInt(0, 2)];
-     let gemGreenCount = 0;
-
      let gemBlueX = itemLocX[getRandomInt(0, 4)];
      let gemBlueY = itemLocY[getRandomInt(0, 2)];
-     let gemBlueCount = 0;
-
      let keyX = itemLocX[getRandomInt(0, 4)];
      let keyY = itemLocY[getRandomInt(0, 2)];
-     let keyCount = 0;
 
-     let dieCount = 0;
+     let gemOrangeCount = 0;
+     let gemGreenCount = 0;
+     let gemBlueCount = 0;
+     let keyCount = 0;
 
      let hideItems = false;
 
@@ -48,68 +40,39 @@ var Engine = (function(global) {
     canvas.classList.add('canvas');
     canvasContainer.appendChild(canvas);
 
-    /* This function serves as the kickoff point for the game loop itself
-     * and handles properly calling the update and render methods.
-     */
+
+    // Handles properly calling the update and render methods
     function main() {
-        /* Get our time delta information which is required if your game
-         * requires smooth animation. Because everyone's computer processes
-         * instructions at different speeds we need a constant value that
-         * would be the same for everyone (regardless of how fast their
-         * computer is) - hurray time!
-         */
+        // Smooth animation regardless of computer using time delta
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
 
-        /* Call our update/render functions, pass along the time delta to
-         * our update function since it may be used for smooth animation.
-         */
         update(dt);
         render();
 
-        /* Set our lastTime variable which is used to determine the time delta
-         * for the next time this function is called.
-         */
         lastTime = now;
 
-        /* Use the browser's requestAnimationFrame function to call this
-         * function again as soon as the browser is able to draw another frame.
-         */
+        // Call this function again when the browser can draw another frame
         win.requestAnimationFrame(main);
     }
 
-    /* This function does some initial setup that should only occur once,
-     * particularly setting the lastTime variable that is required for the
-     * game loop.
-     */
+
+    // Initial setup
     function init() {
-        reset();
         lastTime = Date.now();
         main();
     }
 
-    /* This function is called by main (our game loop) and itself calls all
-     * of the functions which may need to update entity's data. Based on how
-     * you implement your collision detection (when two entities occupy the
-     * same space, for instance when your character should die), you may find
-     * the need to add an additional function call here. For now, we've left
-     * it commented out - you may or may not want to implement this
-     * functionality this way (you could just implement collision detection
-     * on the entities themselves within your app.js file).
-     */
+
+    // Call all functions which may need to update an entity's data
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
         checkForWin();
     }
 
-    /* This is called by the update function and loops through all of the
-     * objects within your allEnemies array as defined in app.js and calls
-     * their update() methods. It will then call the update function for your
-     * player object. These update methods should focus purely on updating
-     * the data/properties related to the object. Do your drawing in your
-     * render methods.
-     */
+
+    // Update enemies and player data/properties
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
@@ -117,36 +80,32 @@ var Engine = (function(global) {
         player.update();
     }
 
-
+    // Check to see if the player has collided with an enemy or item
     function checkCollisions() {
+      // Kill player if collision with an enemy
       allEnemies.forEach(function(enemy) {
-        // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
-        //                 (enemy.x + 2.5), (enemy.y + 78), enemy.spriteWidth, enemy.spriteHeight)){
-        if ((player.x + 17.5) < (enemy.x + 2.5) + enemy.spriteWidth &&
-            (player.x + 17.5) + player.spriteWidth > (enemy.x + 2.5) &&
-            (player.y + 64.5)  < (enemy.y + 78) + enemy.spriteHeight &&
-            player.spriteHeight + (player.y + 64.5) > (enemy.y + 78)) {
+        if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
+                        (enemy.x + 2.5), (enemy.y + 78), enemy.spriteWidth, enemy.spriteHeight)){
               player.score -= player.tempScore;
+
               player.die();
-              player.tempScore = 0;
               resetItemCounts();
 
+              // Change location of the items when game over
               if (player.lives == 0){
                 changeItemLoc();
               }
         }
       });
 
-      // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
-      //                 (keyX + 30), (keyY + 57), 43, 85)){
-      if ((player.x + 17.5) < (keyX + 30) + 43 &&
-          (player.x + 17.5) + player.spriteWidth > (keyX + 2.5) &&
-          (player.y + 64.5)  < (keyY + 95) + 46 &&
-          player.spriteHeight + (player.y + 64.5) > (keyY + 95)) {
+      // Give player key if collision
+      if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
+                      (keyX + 30), (keyY + 95), 43, 46)){
             player.key = true;
+
+            // Only increase the score once during the frames the player is colliding
             if (keyCount == 0){
-              player.score += 2;
-              player.tempScore += 2;
+              increaseScores(2);
               keyCount++;
             }
 
@@ -154,51 +113,43 @@ var Engine = (function(global) {
             keyIcon.classList.add('found');
       }
 
-      // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
-      //                 (gemOrangeX  + 3), (gemOrangeY + 58), 95, 104)){
-      if ((player.x + 17.5) < (gemOrangeX  + 3) + 95 &&
-          (player.x + 17.5) + player.spriteWidth > (gemOrangeX  + 2.5) &&
-          (player.y + 64.5)  < (gemOrangeY + 105) + 57 &&
-          player.spriteHeight + (player.y + 64.5) > (gemOrangeY + 105)) {
+      //Orange Gem: Increase score if player collides with gem
+      if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
+                      (gemOrangeX  + 3), (gemOrangeY + 105), 95, 57)){
             player.gemOrange = true;
 
+            // Only increase the score once during the frames the player is colliding
             if (gemOrangeCount == 0){
-              player.score++;
-              player.tempScore++;
+              increaseScores(1);
               gemOrangeCount++;
             }
       }
 
-      // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
-      //                 (gemGreenX  + 3), (gemGreenY + 58), 95, 104)){
-      if ((player.x + 17.5) < (gemGreenX  + 3) + 95 &&
-          (player.x + 17.5) + player.spriteWidth > (gemGreenX  + 2.5) &&
-          (player.y + 64.5)  < (gemGreenY + 105) + 57 &&
-          player.spriteHeight + (player.y + 64.5) > (gemGreenY + 105)) {
+      //Green Gem: Increase score if player collides with gem
+      if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
+                      (gemGreenX  + 3), (gemGreenY + 105), 95, 57)){
             player.gemGreen = true;
 
+            // Only increase the score once during the frames the player is colliding
             if (gemGreenCount == 0){
-              player.score++;
-              player.tempScore++;
+              increaseScores(1);
               gemGreenCount++;
             }
       }
 
-      // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
-      //                 (gemBlueX  + 3), (gemBlueY + 58), 95, 104)){
-      if ((player.x + 17.5) < (gemBlueX  + 3) + 95 &&
-          (player.x + 17.5) + player.spriteWidth > (gemBlueX  + 2.5) &&
-          (player.y + 64.5)  < (gemBlueY + 105) + 57 &&
-          player.spriteHeight + (player.y + 64.5) > (gemBlueY + 105)) {
+      //Blue Gem: Increase score if player collides with gem
+      if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
+                      (gemBlueX  + 3), (gemBlueY + 105), 95, 57)){
             player.gemBlue = true;
 
+            // Only increase the score once during the frames the player is colliding
             if (gemBlueCount == 0){
-              player.score++;
-              player.tempScore++;
+              increaseScores(1);
               gemBlueCount++;
             }
       }
     }
+
 
     //Collision detection function modified from:
     //https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
@@ -213,6 +164,15 @@ var Engine = (function(global) {
       }
     }
 
+
+    // Increase all score tracking variables by parameter passed in
+    function increaseScores(val){
+      player.score += val;
+      player.tempScore += val;
+    }
+
+
+    // Allow scores/key to be increased/collected again if player collides with an item
     function resetItemCounts(){
       gemOrangeCount = 0;
       gemGreenCount = 0;
@@ -220,17 +180,17 @@ var Engine = (function(global) {
       keyCount = 0;
     }
 
-
+    // If player is on winning portal with key, change item location, and reset the game
     function checkForWin(){
       if (player.x == WIN_PORTAL_X && player.y == WIN_PORTAL_Y && player.key == true){
         setTimeout(function() {
           player.win();
         }, 200);
 
+        // Keep items hidden while changing location (items will change locations
+        // for several frames and look glitchy otherwise)
         hideItems = true;
         changeItemLoc();
-
-        player.tempScore = 0;
         resetItemCounts();
 
       }else{
@@ -238,6 +198,7 @@ var Engine = (function(global) {
       }
     }
 
+    // Randomly generate new coordinates for items within propper bounds
     function changeItemLoc() {
       keyX = itemLocX[getRandomInt(0, 4)];
       keyY = itemLocY[getRandomInt(0, 2)];
@@ -252,23 +213,16 @@ var Engine = (function(global) {
       gemBlueY = itemLocY[getRandomInt(0, 2)];
     }
 
+
     //Returns a random integer between min (inclusive) and max (inclusive)
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    /* This function initially draws the "game level", it will then call
-     * the renderEntities function. Remember, this function is called every
-     * game tick (or loop of the game engine) because that's how games work -
-     * they are flipbooks creating the illusion of animation but in reality
-     * they are just drawing the entire screen over and over.
-     */
 
+    // Draws the "game level", then calls renderEntities
     function render() {
-        /* This array holds the relative URL to the image used
-         * for that particular row of the game level.
-         */
         var rowImages = [
                 'images/water-block.png',   // Top row is water
                 'images/stone-block.png',   // Row 1 of 3 of stone
@@ -284,37 +238,28 @@ var Engine = (function(global) {
         // Before drawing, clear existing canvas
         ctx.clearRect(0,0,canvas.width,canvas.height)
 
-        /* Loop through the number of rows and columns we've defined above
-         * and, using the rowImages array, draw the correct image for that
-         * portion of the "grid"
-         */
+        // Draw gameboard tiles
         for (row = 0; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
-                /* The drawImage function of the canvas' context element
-                 * requires 3 parameters: the image to draw, the x coordinate
-                 * to start drawing and the y coordinate to start drawing.
-                 * We're using our Resources helpers to refer to our images
-                 * so that we get the benefits of caching these images, since
-                 * we're using them over and over.
-                 */
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
 
+        // Draw win portal
         ctx.drawImage(Resources.get('images/selector.png'), 202, -41.5);
 
+        // Draw key item
         if (player.key == false && hideItems == false){
           ctx.drawImage(Resources.get('images/key.png'), keyX, keyY);
         }
 
+        // Draw gem items
         if (player.gemOrange == false && hideItems == false){
           ctx.drawImage(Resources.get('images/gem-orange.png'), gemOrangeX, gemOrangeY);
         }
-
         if (player.gemGreen == false && hideItems == false){
           ctx.drawImage(Resources.get('images/gem-green.png'), gemGreenX, gemGreenY);
         }
-
         if (player.gemBlue == false && hideItems == false){
           ctx.drawImage(Resources.get('images/gem-blue.png'), gemBlueX, gemBlueY);
         }
@@ -323,14 +268,8 @@ var Engine = (function(global) {
     }
 
 
-    /* This function is called by the render function and is called on each game
-     * tick. Its purpose is to then call the render functions you have defined
-     * on your enemy and player entities within app.js
-     */
+    // Call render functions defined for enemies and player classes in app.js
     function renderEntities() {
-        /* Loop through all of the objects within the allEnemies array and call
-         * the render function you have defined.
-         */
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
@@ -338,17 +277,7 @@ var Engine = (function(global) {
         player.render();
     }
 
-    /* This function does nothing but it could have been a good place to
-     * handle game reset states - maybe a new game menu or a game over screen
-     * those sorts of things. It's only called once by the init() method.
-     */
-    function reset() {
-    }
 
-    /* Go ahead and load all of the images we know we're going to need to
-     * draw our game level. Then set init as the callback method, so that when
-     * all of these images are properly loaded our game will start.
-     */
     Resources.load([
         'images/stone-block.png',
         'images/water-block.png',
@@ -363,9 +292,5 @@ var Engine = (function(global) {
     ]);
     Resources.onReady(init);
 
-    /* Assign the canvas' context object to the global variable (the window
-     * object when run in a browser) so that developers can use it more easily
-     * from within their app.js files.
-     */
     global.ctx = ctx;
 })(this);

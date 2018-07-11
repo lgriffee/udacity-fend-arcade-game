@@ -166,6 +166,8 @@ Player.prototype.reset = function() {
 
     removeKey();
     removeGems();
+
+    player.tempScore = 0;
 }
 
 
