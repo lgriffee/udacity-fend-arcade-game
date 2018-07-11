@@ -2,15 +2,6 @@
  * This file provides the game loop functionality (update entities and render),
  * draws the initial game board on the screen, and then calls the update and
  * render methods on your player and enemy objects (defined in your app.js).
- *
- * A game engine works by drawing the entire game screen over and over, kind of
- * like a flipbook you may have created as a kid. When your player moves across
- * the screen, it may look like just that image/character is moving or being
- * drawn but that is not the case. What's really happening is the entire "scene"
- * is being drawn over and over, presenting the illusion of animation.
- *
- * This engine makes the canvas' context (ctx) object globally available to make
- * writing app.js a little simpler to work with.
  */
 
 
@@ -22,11 +13,28 @@ var Engine = (function(global) {
      const WIN_PORTAL_X = 202;
      const WIN_PORTAL_Y = -20.75;
 
-     const keyLocX = [0, 101, 202, 303, 404];
-     const keyLocY = [41.5, 124.5, 207.5];
+     const itemLocX = [0, 101, 202, 303, 404];
+     const itemLocY = [41.5, 124.5, 207.5];
 
-     let keyX = keyLocX[getRandomInt(0, 4)];
-     let keyY = keyLocY[getRandomInt(0, 2)];
+     let gemOrangeX = itemLocX[getRandomInt(0, 4)];
+     let gemOrangeY = itemLocY[getRandomInt(0, 2)];
+     let gemOrangeCount = 0;
+
+     let gemGreenX = itemLocX[getRandomInt(0, 4)];
+     let gemGreenY = itemLocY[getRandomInt(0, 2)];
+     let gemGreenCount = 0;
+
+     let gemBlueX = itemLocX[getRandomInt(0, 4)];
+     let gemBlueY = itemLocY[getRandomInt(0, 2)];
+     let gemBlueCount = 0;
+
+     let keyX = itemLocX[getRandomInt(0, 4)];
+     let keyY = itemLocY[getRandomInt(0, 2)];
+     let keyCount = 0;
+
+     let dieCount = 0;
+
+     let hideItems = false;
 
     var doc = global.document,
         win = global.window,
@@ -92,7 +100,7 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
-        checkForWin(); 
+        checkForWin();
     }
 
     /* This is called by the update function and loops through all of the
@@ -110,44 +118,130 @@ var Engine = (function(global) {
     }
 
 
-    //Collision detection function modified from:
-    //https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
     function checkCollisions() {
       allEnemies.forEach(function(enemy) {
+        // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
+        //                            (enemy.x + 2.5), (enemy.y + 78), enemy.spriteWidth, enemy.spriteHeight )){
         if ((player.x + 17.5) < (enemy.x + 2.5) + enemy.spriteWidth &&
             (player.x + 17.5) + player.spriteWidth > (enemy.x + 2.5) &&
             (player.y + 64.5)  < (enemy.y + 78) + enemy.spriteHeight &&
             player.spriteHeight + (player.y + 64.5) > (enemy.y + 78)) {
+              player.score -= player.tempScore;
               player.die();
+              player.tempScore = 0;
+              resetItemCounts();
 
               if (player.lives == 0){
-                changeKeyLoc();
+                changeItemLoc();
               }
         }
       });
 
-      if ((player.x + 17.5) < (keyX + 2.5) + 43 &&
+      if ((player.x + 17.5) < (keyX + 30) + 43 &&
           (player.x + 17.5) + player.spriteWidth > (keyX + 2.5) &&
-          (player.y + 64.5)  < (keyY + 78) + 85 &&
+          (player.y + 64.5)  < (keyY + 57) + 85 &&
           player.spriteHeight + (player.y + 64.5) > (keyY + 78)) {
             player.key = true;
+            if (keyCount == 0){
+              player.score += 2;
+              player.tempScore += 2;
+              keyCount++;
+            }
+
             const keyIcon = document.querySelector('.key-icon');
             keyIcon.classList.add('found');
       }
-    }
 
-    function checkForWin(){
-      if (player.x == WIN_PORTAL_X && player.y == WIN_PORTAL_Y && player.key == true){
-        setTimeout(function () {
-          player.win();
-        }, 200);
-        changeKeyLoc();
+      if ((player.x + 17.5) < (gemOrangeX  + 3) + 95 &&
+          (player.x + 17.5) + player.spriteWidth > (gemOrangeX  + 2.5) &&
+          (player.y + 64.5)  < (gemOrangeY + 58) + 104 &&
+          player.spriteHeight + (player.y + 64.5) > (gemOrangeY + 78)) {
+            player.gemOrange = true;
+
+            if (gemOrangeCount == 0){
+              player.score++;
+              player.tempScore++;
+              gemOrangeCount++;
+            }
+      }
+
+      if ((player.x + 17.5) < (gemGreenX  + 3) + 95 &&
+          (player.x + 17.5) + player.spriteWidth > (gemGreenX  + 2.5) &&
+          (player.y + 64.5)  < (gemGreenY + 58) + 104 &&
+          player.spriteHeight + (player.y + 64.5) > (gemGreenY + 78)) {
+            player.gemGreen = true;
+
+            if (gemGreenCount == 0){
+              player.score++;
+              player.tempScore++;
+              gemGreenCount++;
+            }
+      }
+
+      if ((player.x + 17.5) < (gemBlueX  + 3) + 95 &&
+          (player.x + 17.5) + player.spriteWidth > (gemBlueX  + 2.5) &&
+          (player.y + 64.5)  < (gemBlueY + 58) + 104 &&
+          player.spriteHeight + (player.y + 64.5) > (gemBlueY + 78)) {
+            player.gemBlue = true;
+
+            if (gemBlueCount == 0){
+              player.score++;
+              player.tempScore++;
+              gemBlueCount++;
+            }
       }
     }
 
-    function changeKeyLoc() {
-      keyX = keyLocX[getRandomInt(0, 4)];
-      keyY = keyLocY[getRandomInt(0, 2)];
+    //Collision detection function modified from:
+    //https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+    // function isCollision(aLocX, aLocY, aWidth, aHeight, bLocX, bLocY, bWidth, bHeight ){
+    //   if (aLocX < bLocX + bWidth &&
+    //       aLocX + aWidth > bLocX &&
+    //       aLocY  < bLocY + bHeight &&
+    //       aHeight + aLocY > bLocY){
+    //     return true;
+    //   }else{
+    //     return false;
+    //   }
+    // }
+
+    function resetItemCounts(){
+      gemOrangeCount = 0;
+      gemGreenCount = 0;
+      gemBlueCount = 0;
+      keyCount = 0;
+    }
+
+
+    function checkForWin(){
+      if (player.x == WIN_PORTAL_X && player.y == WIN_PORTAL_Y && player.key == true){
+        setTimeout(function() {
+          player.win();
+        }, 200);
+
+        hideItems = true;
+        changeItemLoc();
+
+        player.tempScore = 0;
+        resetItemCounts();
+
+      }else{
+        hideItems = false;
+      }
+    }
+
+    function changeItemLoc() {
+      keyX = itemLocX[getRandomInt(0, 4)];
+      keyY = itemLocY[getRandomInt(0, 2)];
+
+      gemOrangeX = itemLocX[getRandomInt(0, 4)];
+      gemOrangeY = itemLocY[getRandomInt(0, 2)];
+
+      gemGreenX = itemLocX[getRandomInt(0, 4)];
+      gemGreenY = itemLocY[getRandomInt(0, 2)];
+
+      gemBlueX = itemLocX[getRandomInt(0, 4)];
+      gemBlueY = itemLocY[getRandomInt(0, 2)];
     }
 
     //Returns a random integer between min (inclusive) and max (inclusive)
@@ -201,8 +295,20 @@ var Engine = (function(global) {
 
         ctx.drawImage(Resources.get('images/selector.png'), 202, -41.5);
 
-        if (player.key == false){
+        if (player.key == false && hideItems == false){
           ctx.drawImage(Resources.get('images/key.png'), keyX, keyY);
+        }
+
+        if (player.gemOrange == false && hideItems == false){
+          ctx.drawImage(Resources.get('images/gem-orange.png'), gemOrangeX, gemOrangeY);
+        }
+
+        if (player.gemGreen == false && hideItems == false){
+          ctx.drawImage(Resources.get('images/gem-green.png'), gemGreenX, gemGreenY);
+        }
+
+        if (player.gemBlue == false && hideItems == false){
+          ctx.drawImage(Resources.get('images/gem-blue.png'), gemBlueX, gemBlueY);
         }
 
         renderEntities();

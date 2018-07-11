@@ -24,11 +24,10 @@ const RAND_SPEED_HIGH = 500;
 const winModal = document.querySelector('.win-modal');
 const gameOverModal = document.querySelector('.game-over-modal');
 const keyIcon = document.querySelector('.key-icon');
+const score = document.querySelector('.score');
 
 let  allEnemies = [];
 let player;
-
-let score = 0;
 
 /*
 *
@@ -45,6 +44,7 @@ var Enemy = function(x, y, speed) {
     this.y = y;
     this.speed = speed;
 };
+
 
 // Update the enemy's position
 Enemy.prototype.update = function(dt) {
@@ -88,13 +88,18 @@ var Player = function(x, y) {
     this.spriteHeight = 75;
     this.x = x;
     this.y = y;
-    this.key = false;
     this.lives = 3;
+    this.key = false;
+    this.gemOrange = false;
+    this.gemGreen = false;
+    this.gemBlue = false;
+    this.tempScore = 0;
+    this.score = 0;
 };
 
 // Update the player's position
 Player.prototype.update = function() {
-
+  score.innerHTML = this.score;
 };
 
 // Draw the player on the screen
@@ -132,15 +137,21 @@ Player.prototype.handleInput = function(key) {
 Player.prototype.die = function() {
     this.lives--;
     removeHeart();
-    this.reset();
+    removeKey();
+    removeGems();
     if (this.lives == 0){
       showGameOverModal();
     }
+    this.reset();
 };
 
 // Incread score and reset player when they reach the exit
 Player.prototype.win = function() {
+
   winModal.style.display = 'block';
+
+  removeKey();
+  removeGems();
 
   const that = this;
   setTimeout(function () {
@@ -157,11 +168,11 @@ Player.prototype.reset = function() {
     this.x = PLAYER_START_X * COL_FACTOR;
     this.y = PLAYER_START_Y * ROW_FACTOR;
 
-    if (player.key == true){
-      keyIcon.classList.remove('found');
-      player.key = false;
-    }
-};
+    // removeKey();
+    // removeGems();
+
+    // this.tempScore = 0;
+}
 
 
 /*
@@ -169,11 +180,6 @@ Player.prototype.reset = function() {
 * GAMEPLAY
 *
 */
-allEnemies = [new Enemy(ENEMY_START_LOC, 61, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
-                     new Enemy(ENEMY_START_LOC, 144, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
-                     new Enemy(ENEMY_START_LOC, 227, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH))];
-player = new Player(PLAYER_START_X * COL_FACTOR, PLAYER_START_Y * ROW_FACTOR);
-
 newGame();
 
 
@@ -187,7 +193,11 @@ newGame();
 
 // Reset game
 function newGame(){
-  allEnemies.forEach(function(enemy) {enemy.reset();});
+  allEnemies = [new Enemy(ENEMY_START_LOC, 61, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
+                       new Enemy(ENEMY_START_LOC, 144, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
+                       new Enemy(ENEMY_START_LOC, 227, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH))];
+
+  player = new Player(PLAYER_START_X * COL_FACTOR, PLAYER_START_Y * ROW_FACTOR);
 
   player.reset();
 
@@ -195,7 +205,7 @@ function newGame(){
   const avatar = document.querySelector('.avatar');
   avatar.src = player.sprite;
 
-  score = 0;
+  player.score = 0;
 
   gameOverModal.style.display = 'none';
 }
@@ -208,9 +218,8 @@ function showGameOverModal(){
 
 // Get the total time it took the user to play the game
 function getResultScore(){
-  let score = document.querySelector('.score');
   let scoreResult = document.querySelector('.score-result');
-  scoreResult.textContent = score.textContent;
+  scoreResult.textContent = player.score;
 }
 
 
@@ -236,6 +245,19 @@ function addHeart(){
   const heart = document.querySelector('.fa-heart-o');
   heart.classList.remove('fa-heart-o');
   heart.classList.add('fa-heart');
+}
+
+function removeKey(){
+  if (player.key == true){
+    keyIcon.classList.remove('found');
+    player.key = false;
+  }
+}
+
+function removeGems(){
+  player.gemOrange = false;
+  player.gemGreen = false;
+  player.gemBlue = false;
 }
 
 
