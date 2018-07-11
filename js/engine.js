@@ -248,11 +248,6 @@ var Engine = (function(global) {
         // Draw win portal
         ctx.drawImage(Resources.get('images/selector.png'), 202, -41.5);
 
-        // Draw key item
-        if (player.key == false && hideItems == false){
-          ctx.drawImage(Resources.get('images/key.png'), keyX, keyY);
-        }
-
         // Draw gem items
         if (player.gemOrange == false && hideItems == false){
           ctx.drawImage(Resources.get('images/gem-orange.png'), gemOrangeX, gemOrangeY);
@@ -262,6 +257,11 @@ var Engine = (function(global) {
         }
         if (player.gemBlue == false && hideItems == false){
           ctx.drawImage(Resources.get('images/gem-blue.png'), gemBlueX, gemBlueY);
+        }
+
+        // Draw key item
+        if (player.key == false && hideItems == false){
+          ctx.drawImage(Resources.get('images/key.png'), keyX, keyY);
         }
 
         renderEntities();
