@@ -121,7 +121,7 @@ var Engine = (function(global) {
     function checkCollisions() {
       allEnemies.forEach(function(enemy) {
         // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
-        //                            (enemy.x + 2.5), (enemy.y + 78), enemy.spriteWidth, enemy.spriteHeight )){
+        //                 (enemy.x + 2.5), (enemy.y + 78), enemy.spriteWidth, enemy.spriteHeight)){
         if ((player.x + 17.5) < (enemy.x + 2.5) + enemy.spriteWidth &&
             (player.x + 17.5) + player.spriteWidth > (enemy.x + 2.5) &&
             (player.y + 64.5)  < (enemy.y + 78) + enemy.spriteHeight &&
@@ -137,10 +137,12 @@ var Engine = (function(global) {
         }
       });
 
+      // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
+      //                 (keyX + 30), (keyY + 57), 43, 85)){
       if ((player.x + 17.5) < (keyX + 30) + 43 &&
           (player.x + 17.5) + player.spriteWidth > (keyX + 2.5) &&
-          (player.y + 64.5)  < (keyY + 57) + 85 &&
-          player.spriteHeight + (player.y + 64.5) > (keyY + 78)) {
+          (player.y + 64.5)  < (keyY + 95) + 46 &&
+          player.spriteHeight + (player.y + 64.5) > (keyY + 95)) {
             player.key = true;
             if (keyCount == 0){
               player.score += 2;
@@ -152,10 +154,12 @@ var Engine = (function(global) {
             keyIcon.classList.add('found');
       }
 
+      // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
+      //                 (gemOrangeX  + 3), (gemOrangeY + 58), 95, 104)){
       if ((player.x + 17.5) < (gemOrangeX  + 3) + 95 &&
           (player.x + 17.5) + player.spriteWidth > (gemOrangeX  + 2.5) &&
-          (player.y + 64.5)  < (gemOrangeY + 58) + 104 &&
-          player.spriteHeight + (player.y + 64.5) > (gemOrangeY + 78)) {
+          (player.y + 64.5)  < (gemOrangeY + 105) + 57 &&
+          player.spriteHeight + (player.y + 64.5) > (gemOrangeY + 105)) {
             player.gemOrange = true;
 
             if (gemOrangeCount == 0){
@@ -165,10 +169,12 @@ var Engine = (function(global) {
             }
       }
 
+      // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
+      //                 (gemGreenX  + 3), (gemGreenY + 58), 95, 104)){
       if ((player.x + 17.5) < (gemGreenX  + 3) + 95 &&
           (player.x + 17.5) + player.spriteWidth > (gemGreenX  + 2.5) &&
-          (player.y + 64.5)  < (gemGreenY + 58) + 104 &&
-          player.spriteHeight + (player.y + 64.5) > (gemGreenY + 78)) {
+          (player.y + 64.5)  < (gemGreenY + 105) + 57 &&
+          player.spriteHeight + (player.y + 64.5) > (gemGreenY + 105)) {
             player.gemGreen = true;
 
             if (gemGreenCount == 0){
@@ -178,10 +184,12 @@ var Engine = (function(global) {
             }
       }
 
+      // if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
+      //                 (gemBlueX  + 3), (gemBlueY + 58), 95, 104)){
       if ((player.x + 17.5) < (gemBlueX  + 3) + 95 &&
           (player.x + 17.5) + player.spriteWidth > (gemBlueX  + 2.5) &&
-          (player.y + 64.5)  < (gemBlueY + 58) + 104 &&
-          player.spriteHeight + (player.y + 64.5) > (gemBlueY + 78)) {
+          (player.y + 64.5)  < (gemBlueY + 105) + 57 &&
+          player.spriteHeight + (player.y + 64.5) > (gemBlueY + 105)) {
             player.gemBlue = true;
 
             if (gemBlueCount == 0){
@@ -194,16 +202,16 @@ var Engine = (function(global) {
 
     //Collision detection function modified from:
     //https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-    // function isCollision(aLocX, aLocY, aWidth, aHeight, bLocX, bLocY, bWidth, bHeight ){
-    //   if (aLocX < bLocX + bWidth &&
-    //       aLocX + aWidth > bLocX &&
-    //       aLocY  < bLocY + bHeight &&
-    //       aHeight + aLocY > bLocY){
-    //     return true;
-    //   }else{
-    //     return false;
-    //   }
-    // }
+    function isCollision(aLocX, aLocY, aWidth, aHeight, bLocX, bLocY, bWidth, bHeight ){
+      if (aLocX < (bLocX + bWidth) &&
+          (aLocX + aWidth) > bLocX &&
+          aLocY  < (bLocY + bHeight) &&
+          (aHeight + aLocY) > bLocY){
+        return true;
+      }else{
+        return false;
+      }
+    }
 
     function resetItemCounts(){
       gemOrangeCount = 0;

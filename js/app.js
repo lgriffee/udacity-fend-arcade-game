@@ -137,8 +137,7 @@ Player.prototype.handleInput = function(key) {
 Player.prototype.die = function() {
     this.lives--;
     removeHeart();
-    removeKey();
-    removeGems();
+
     if (this.lives == 0){
       showGameOverModal();
     }
@@ -149,9 +148,6 @@ Player.prototype.die = function() {
 Player.prototype.win = function() {
 
   winModal.style.display = 'block';
-
-  removeKey();
-  removeGems();
 
   const that = this;
   setTimeout(function () {
@@ -168,10 +164,8 @@ Player.prototype.reset = function() {
     this.x = PLAYER_START_X * COL_FACTOR;
     this.y = PLAYER_START_Y * ROW_FACTOR;
 
-    // removeKey();
-    // removeGems();
-
-    // this.tempScore = 0;
+    removeKey();
+    removeGems();
 }
 
 
