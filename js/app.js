@@ -35,7 +35,7 @@ let player;
 *
 */
 
-// Enemies our player must avoid
+// Enemies the player must avoid
 var Enemy = function(x, y, speed) {
     this.sprite = 'images/enemy-bug.png';
     this.spriteWidth = 96;
@@ -57,7 +57,7 @@ Enemy.prototype.update = function(dt) {
     }
 };
 
-// Reset the player
+// Reset enemy location & speed
 Enemy.prototype.reset = function() {
   this.x = ENEMY_START_LOC;
   this.speed = getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH);
@@ -144,7 +144,7 @@ Player.prototype.die = function() {
     this.reset();
 };
 
-// Incread score and reset player when they reach the exit
+// Incread score and reset player when they reach the win portal
 Player.prototype.win = function() {
 
   winModal.style.display = 'block';
@@ -159,7 +159,7 @@ Player.prototype.win = function() {
   }, 2000);
 };
 
-// Reset the player
+// Reset the player location, items, and score
 Player.prototype.reset = function() {
     this.x = PLAYER_START_X * COL_FACTOR;
     this.y = PLAYER_START_Y * ROW_FACTOR;
@@ -176,6 +176,7 @@ Player.prototype.reset = function() {
 * GAMEPLAY
 *
 */
+
 newGame();
 
 
@@ -187,7 +188,7 @@ newGame();
 
 /* ------------------------ Gameplay ------------------------*/
 
-// Reset game
+// Setup a new game
 function newGame(){
   allEnemies = [new Enemy(ENEMY_START_LOC, 61, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
                        new Enemy(ENEMY_START_LOC, 144, getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH)),
@@ -206,6 +207,8 @@ function newGame(){
   gameOverModal.style.display = 'none';
 }
 
+
+// Reveal the game over modal
 function showGameOverModal(){
   getResultScore();
   gameOverModal.style.display = 'block';
@@ -221,6 +224,7 @@ function getResultScore(){
 
 /* ------------------------ Score Pannel ------------------------*/
 
+// Remove a heart from the score pannel
 function removeHeart(){
   const heart = document.querySelector('.fa-heart');
   if (heart != undefined){
@@ -229,6 +233,8 @@ function removeHeart(){
   }
 }
 
+
+// Add back all hearts to the score pannel
 function resetHearts(){
   const maxHearts = 3;
   const heartsNeeded = (maxHearts - player.lives);
@@ -237,12 +243,16 @@ function resetHearts(){
   }
 }
 
+
+// Add back a heart to the score pannel
 function addHeart(){
   const heart = document.querySelector('.fa-heart-o');
   heart.classList.remove('fa-heart-o');
   heart.classList.add('fa-heart');
 }
 
+
+// "Grey-out" the key on the score pannel
 function removeKey(){
   if (player.key == true){
     keyIcon.classList.remove('found');
@@ -250,6 +260,8 @@ function removeKey(){
   }
 }
 
+
+// Remove all gems from player's inventory
 function removeGems(){
   player.gemOrange = false;
   player.gemGreen = false;
@@ -276,12 +288,16 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
+
+// Reset game
 let restartButton = document.querySelector('.restart-icon');
 restartButton.addEventListener('click', function() {
     resetHearts();
     newGame();
 });
 
+
+// Reset game
 let newGameButton = document.querySelector('.new-game-button');
 newGameButton.addEventListener('click', function() {
     resetHearts();
