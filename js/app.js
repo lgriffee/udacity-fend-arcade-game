@@ -38,6 +38,8 @@ const cancelButton = document.querySelector('.cancel-button');
 const restartButton = document.querySelector('.restart-icon');
 const newGameButton = document.querySelector('.new-game-button');
 
+let character = 'images/char-boy.png';
+
 let  allEnemies = [];
 let player;
 
@@ -95,7 +97,7 @@ Enemy.prototype.render = function() {
 
 // The player the user controls
 var Player = function(x, y) {
-    this.sprite = 'images/char-boy.png';
+    this.sprite = character;
     this.spriteWidth = 66;
     this.spriteHeight = 75;
     this.x = x;
@@ -309,6 +311,7 @@ avatarButton.addEventListener('click', function() {
 // Change character/avatar
 avatarBoyButton.addEventListener('click', function() {
     player.sprite = 'images/char-boy.png';
+    character = player.sprite;
     avatarButton.src = player.sprite;
     avatarModal.style.display = 'none';
 });
@@ -317,6 +320,7 @@ avatarBoyButton.addEventListener('click', function() {
 // Change character/avatar
 avatarCatGirlButton.addEventListener('click', function() {
     player.sprite = 'images/char-cat-girl.png';
+    character = player.sprite;
     avatarButton.src = player.sprite;
     avatarModal.style.display = 'none';
 });
@@ -325,6 +329,7 @@ avatarCatGirlButton.addEventListener('click', function() {
 // Change character/avatar
 avatarHornGirlButton.addEventListener('click', function() {
     player.sprite = 'images/char-horn-girl.png';
+    character = player.sprite;
     avatarButton.src = player.sprite;
     avatarModal.style.display = 'none';
 });
@@ -333,6 +338,7 @@ avatarHornGirlButton.addEventListener('click', function() {
 // Change character/avatar
 avatarPinkGirlButton.addEventListener('click', function() {
     player.sprite = 'images/char-pink-girl.png';
+    character = player.sprite;
     avatarButton.src = player.sprite;
     avatarModal.style.display = 'none';
 });
@@ -341,6 +347,7 @@ avatarPinkGirlButton.addEventListener('click', function() {
 // Change character/avatar
 avatarPrincessButton.addEventListener('click', function() {
     player.sprite = 'images/char-princess-girl.png';
+    character = player.sprite;
     avatarButton.src = player.sprite;
     avatarModal.style.display = 'none';
 });
