@@ -23,8 +23,20 @@ const RAND_SPEED_HIGH = 500;
 
 const winModal = document.querySelector('.win-modal');
 const gameOverModal = document.querySelector('.game-over-modal');
+const avatarModal = document.querySelector('.avatar-modal');
+
 const keyIcon = document.querySelector('.key-icon');
 const score = document.querySelector('.score');
+
+const avatarButton = document.querySelector('.avatar');
+const avatarBoyButton = document.querySelector('.boy');
+const avatarCatGirlButton = document.querySelector('.cat-girl');
+const avatarHornGirlButton = document.querySelector('.horn-girl');
+const avatarPinkGirlButton = document.querySelector('.pink-girl');
+const avatarPrincessButton = document.querySelector('.princess');
+const cancelButton = document.querySelector('.cancel-button');
+const restartButton = document.querySelector('.restart-icon');
+const newGameButton = document.querySelector('.new-game-button');
 
 let  allEnemies = [];
 let player;
@@ -199,8 +211,7 @@ function newGame(){
   player.reset();
 
   // Draw avatar button on scoreboard
-  const avatar = document.querySelector('.avatar');
-  avatar.src = player.sprite;
+  avatarButton.src = player.sprite;
 
   player.score = 0;
 
@@ -289,8 +300,59 @@ document.addEventListener('keyup', function(e) {
 });
 
 
+// Display change character/avatar window
+avatarButton.addEventListener('click', function() {
+    avatarModal.style.display = 'block';
+});
+
+
+// Change character/avatar
+avatarBoyButton.addEventListener('click', function() {
+    player.sprite = 'images/char-boy.png';
+    avatarButton.src = player.sprite;
+    avatarModal.style.display = 'none';
+});
+
+
+// Change character/avatar
+avatarCatGirlButton.addEventListener('click', function() {
+    player.sprite = 'images/char-cat-girl.png';
+    avatarButton.src = player.sprite;
+    avatarModal.style.display = 'none';
+});
+
+
+// Change character/avatar
+avatarHornGirlButton.addEventListener('click', function() {
+    player.sprite = 'images/char-horn-girl.png';
+    avatarButton.src = player.sprite;
+    avatarModal.style.display = 'none';
+});
+
+
+// Change character/avatar
+avatarPinkGirlButton.addEventListener('click', function() {
+    player.sprite = 'images/char-pink-girl.png';
+    avatarButton.src = player.sprite;
+    avatarModal.style.display = 'none';
+});
+
+
+// Change character/avatar
+avatarPrincessButton.addEventListener('click', function() {
+    player.sprite = 'images/char-princess-girl.png';
+    avatarButton.src = player.sprite;
+    avatarModal.style.display = 'none';
+});
+
+
+// Close out of new character/avatar window
+cancelButton.addEventListener('click', function() {
+    avatarModal.style.display = 'none';
+});
+
+
 // Reset game
-let restartButton = document.querySelector('.restart-icon');
 restartButton.addEventListener('click', function() {
     resetHearts();
     newGame();
@@ -298,7 +360,6 @@ restartButton.addEventListener('click', function() {
 
 
 // Reset game
-let newGameButton = document.querySelector('.new-game-button');
 newGameButton.addEventListener('click', function() {
     resetHearts();
     newGame();

@@ -144,6 +144,7 @@ h3 {
   position: relative;
   top: -30px;
   height: 100px;
+  cursor: pointer;
 }
 
 .restart{
@@ -156,6 +157,7 @@ h3 {
   color: var(--restart-color);
   padding: 7px 0 0 0;
   font-size: 20px;
+  cursor: pointer;
 }
 
 
@@ -287,6 +289,69 @@ h3 {
 
 .new-game-button:hover,
 .new-game-button:focus {
+  background-color: var(--modal-button-hover);
+  border: 5px solid var(--modal-button-hover);
+  cursor: pointer;
+}
+
+.avatar-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--modal-overlay);
+}
+
+.avatar-modal-content {
+  margin: 20px auto;
+  padding: 40px;
+  width: 660px;
+  background-color: var(--modal-bkg);
+  border: 5px solid var(--modal-border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  text-align: center;
+}
+
+.avatar-modal-title {
+  margin: 0;
+}
+
+.avatar-button{
+  padding: 0;
+  border: none;
+  background-image: url(../images/grass-block.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
+.avatar-button-wrapper:hover,
+.avatar-button-wrapper:focus {
+  background-image: url(../images/selector.png);
+  background-size: cover;
+}
+
+
+.cancel-button {
+  width: 200px;
+  height: 50px;
+  background-color: var(--modal-button);
+  border: 5px solid var(--modal-button);
+  color: var(--modal-button-text);
+  border-radius: 10px;
+  font-size: 25px;
+  font-family: 'Gaegu', cursive;
+  margin: 30px 0 0 0;
+}
+
+.cancel-button:hover,
+.cancel-button:focus {
   background-color: var(--modal-button-hover);
   border: 5px solid var(--modal-button-hover);
   cursor: pointer;
