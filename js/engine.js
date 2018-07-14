@@ -4,7 +4,6 @@
  * render methods on player and enemy objects (defined in app.js).
  */
 
-
 var Engine = (function(global) {
      const WIN_PORTAL_X = 202;
      const WIN_PORTAL_Y = -20.75;
@@ -39,6 +38,7 @@ var Engine = (function(global) {
     canvas.height = 606;
     canvas.classList.add('canvas');
     canvasContainer.appendChild(canvas);
+
 
 
     // Handles properly calling the update and render methods
@@ -80,6 +80,7 @@ var Engine = (function(global) {
         player.update();
     }
 
+
     // Check to see if the player has collided with an enemy or item
     function checkCollisions() {
       // Kill player if collision with an enemy
@@ -98,6 +99,7 @@ var Engine = (function(global) {
         }
       });
 
+
       // Give player key if collision
       if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
                       (keyX + 30), (keyY + 95), 43, 46)){
@@ -113,6 +115,7 @@ var Engine = (function(global) {
             keyIcon.classList.add('found');
       }
 
+
       //Orange Gem: Increase score if player collides with gem
       if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
                       (gemOrangeX  + 3), (gemOrangeY + 105), 95, 57)){
@@ -125,6 +128,7 @@ var Engine = (function(global) {
             }
       }
 
+
       //Green Gem: Increase score if player collides with gem
       if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
                       (gemGreenX  + 3), (gemGreenY + 105), 95, 57)){
@@ -136,6 +140,7 @@ var Engine = (function(global) {
               gemGreenCount++;
             }
       }
+
 
       //Blue Gem: Increase score if player collides with gem
       if (isCollision((player.x + 17.5), (player.y + 64.5), player.spriteWidth, player.spriteHeight,
@@ -180,6 +185,7 @@ var Engine = (function(global) {
       keyCount = 0;
     }
 
+
     // If player is on winning portal with key, change item location, and reset the game
     function checkForWin(){
       if (player.x == WIN_PORTAL_X && player.y == WIN_PORTAL_Y && player.key == true){
@@ -197,6 +203,7 @@ var Engine = (function(global) {
         hideItems = false;
       }
     }
+
 
     // Randomly generate new coordinates for items within propper bounds
     function changeItemLoc() {
@@ -263,7 +270,6 @@ var Engine = (function(global) {
         if (player.key == false && hideItems == false){
           ctx.drawImage(Resources.get('images/key.png'), keyX, keyY);
         }
-
         renderEntities();
     }
 

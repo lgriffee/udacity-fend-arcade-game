@@ -43,6 +43,8 @@ let character = 'images/char-boy.png';
 let  allEnemies = [];
 let player;
 
+
+
 /*
 *
 * ENEMY CLASS
@@ -71,11 +73,13 @@ Enemy.prototype.update = function(dt) {
     }
 };
 
+
 // Reset enemy location & speed
 Enemy.prototype.reset = function() {
   this.x = ENEMY_START_LOC;
   this.speed = getRandomArbitrary(RAND_SPEED_LOW , RAND_SPEED_HIGH);
 };
+
 
 // Random number generator (between two numbers) function from:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
@@ -83,10 +87,12 @@ function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }
 
+
 // Draw the enemy on the screen
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
 
 
 /*
@@ -111,15 +117,18 @@ var Player = function(x, y) {
     this.score = 0;
 };
 
+
 // Update the player's position
 Player.prototype.update = function() {
   score.innerHTML = this.score;
 };
 
+
 // Draw the player on the screen
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
 
 // Handle keyboard input for the player
 Player.prototype.handleInput = function(key) {
@@ -147,6 +156,7 @@ Player.prototype.handleInput = function(key) {
     }
 };
 
+
 // Decrease lives and reset player when they die
 Player.prototype.die = function() {
     this.lives--;
@@ -157,6 +167,7 @@ Player.prototype.die = function() {
     }
     this.reset();
 };
+
 
 // Incread score and reset player when they reach the win portal
 Player.prototype.win = function() {
@@ -173,6 +184,7 @@ Player.prototype.win = function() {
   }, 2000);
 };
 
+
 // Reset the player location, items, and score
 Player.prototype.reset = function() {
     this.x = PLAYER_START_X * COL_FACTOR;
@@ -185,6 +197,7 @@ Player.prototype.reset = function() {
 }
 
 
+
 /*
 *
 * GAMEPLAY
@@ -192,6 +205,7 @@ Player.prototype.reset = function() {
 */
 
 newGame();
+
 
 
 /*
@@ -280,6 +294,7 @@ function removeGems(){
   player.gemGreen = false;
   player.gemBlue = false;
 }
+
 
 
 /*
