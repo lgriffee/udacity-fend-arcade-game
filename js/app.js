@@ -115,6 +115,7 @@ var Player = function(x, y) {
     this.gemBlue = false;
     this.tempScore = 0;
     this.score = 0;
+    this.canMove = true;
 };
 
 
@@ -132,27 +133,29 @@ Player.prototype.render = function() {
 
 // Handle keyboard input for the player
 Player.prototype.handleInput = function(key) {
-    switch(key) {
-    case 'left':
-      if ((this.x - COL_FACTOR) >= LEFT_BOUND){
-        this.x -= COL_FACTOR;
+  if (this.canMove){
+      switch(key) {
+      case 'left':
+        if ((this.x - COL_FACTOR) >= LEFT_BOUND){
+          this.x -= COL_FACTOR;
+        }
+        break;
+      case 'up':
+        if ((this.y - ROW_FACTOR) >= UP_BOUND){
+          this.y -= ROW_FACTOR;
+        }
+        break;
+      case 'right':
+        if ((this.x + COL_FACTOR) <= RIGHT_BOUND){
+          this.x += COL_FACTOR;
+        }
+        break;
+      case 'down':
+        if ((this.y + ROW_FACTOR) < DOWN_BOUND){
+          this.y += ROW_FACTOR;
+        }
+        break;
       }
-      break;
-    case 'up':
-      if ((this.y - ROW_FACTOR) >= UP_BOUND){
-        this.y -= ROW_FACTOR;
-      }
-      break;
-    case 'right':
-      if ((this.x + COL_FACTOR) <= RIGHT_BOUND){
-        this.x += COL_FACTOR;
-      }
-      break;
-    case 'down':
-      if ((this.y + ROW_FACTOR) < DOWN_BOUND){
-        this.y += ROW_FACTOR;
-      }
-      break;
     }
 };
 
@@ -174,6 +177,9 @@ Player.prototype.win = function() {
 
   winModal.style.display = 'block';
 
+  // Prevent player from moving while modal open
+  player.canMove = false;
+
   const that = this;
   setTimeout(function () {
     that.reset();
@@ -181,6 +187,7 @@ Player.prototype.win = function() {
 
   setTimeout(function () {
     winModal.style.display = 'none';
+    player.canMove = true;
   }, 2000);
 };
 
@@ -239,6 +246,9 @@ function newGame(){
 function showGameOverModal(){
   getResultScore();
   gameOverModal.style.display = 'block';
+
+  // Prevent player from moving while modal open
+  player.canMove = false;
 }
 
 
@@ -320,6 +330,9 @@ document.addEventListener('keyup', function(e) {
 // Display change character/avatar window
 avatarButton.addEventListener('click', function() {
     avatarModal.style.display = 'block';
+
+    // Prevent player from moving while modal open
+    player.canMove = false;
 });
 
 
@@ -329,6 +342,7 @@ avatarBoyButton.addEventListener('click', function() {
     character = player.sprite;
     avatarButton.src = player.sprite;
     avatarModal.style.display = 'none';
+    player.canMove = true;
 });
 
 
@@ -338,6 +352,7 @@ avatarCatGirlButton.addEventListener('click', function() {
     character = player.sprite;
     avatarButton.src = player.sprite;
     avatarModal.style.display = 'none';
+    player.canMove = true;
 });
 
 
@@ -347,6 +362,7 @@ avatarHornGirlButton.addEventListener('click', function() {
     character = player.sprite;
     avatarButton.src = player.sprite;
     avatarModal.style.display = 'none';
+    player.canMove = true;
 });
 
 
@@ -356,6 +372,7 @@ avatarPinkGirlButton.addEventListener('click', function() {
     character = player.sprite;
     avatarButton.src = player.sprite;
     avatarModal.style.display = 'none';
+    player.canMove = true;
 });
 
 
@@ -365,12 +382,14 @@ avatarPrincessButton.addEventListener('click', function() {
     character = player.sprite;
     avatarButton.src = player.sprite;
     avatarModal.style.display = 'none';
+    player.canMove = true;
 });
 
 
 // Close out of new character/avatar window
 cancelButton.addEventListener('click', function() {
     avatarModal.style.display = 'none';
+    player.canMove = true;
 });
 
 
