@@ -165,7 +165,7 @@ Player.prototype.die = function() {
     this.lives--;
     removeHeart();
 
-    if (this.lives == 0){
+    if (this.lives === 0){
       showGameOverModal();
     }
     this.reset();
@@ -291,7 +291,7 @@ function addHeart(){
 
 // "Grey-out" the key on the score pannel
 function removeKey(){
-  if (player.key == true){
+  if (player.key === true){
     keyIcon.classList.remove('found');
     player.key = false;
   }
